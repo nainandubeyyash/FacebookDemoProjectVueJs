@@ -1,5 +1,10 @@
 <template>
   <div id="SignUp">
+    <head>
+        <title>Facebook</title>
+        <link rel="icon" type="image/x-icon" href="https://icons.iconarchive.com/icons/yootheme/social-bookmark/512/social-facebook-box-blue-icon.png">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
     <body>
         <header>
             <div class="header">
@@ -373,6 +378,11 @@ footer
     padding-top: 15px;
     padding-bottom: 15px;
     
+}
+
+input{
+  background-color: white;
+  border-color: #000000;
 }
 
 </style>
