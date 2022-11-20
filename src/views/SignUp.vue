@@ -9,9 +9,13 @@
         <header>
             <div class="header">
                 <li class="sitename"><a href="http://Facebook.com">Facebook</a></li>
-                 <form name="f1" action="post">
-                    <li>Email or Phone<br><input type="text" name="email" class="e"></li>
-                    <li>Password<br><input type="password" name="password" class="p"><br><a href="">Forgotten account?</a></li>
+                 <form @submit.prevent="loginForm" name="f1" action="post">
+                    <li>Email<br><input type="text" v-model="emailLogin" name="email" class="e">
+                    <div class="error" v-if="loginEmailError">{{loginEmailError}}</div>
+                    </li>
+                    <li>Password<br><input type="password" v-model="passwordLogin" name="password" class="p">
+                    <div class="error" v-if="loginPasswordError">{{loginPasswordError}}</div>
+                    <br><a href="">Forgotten account?</a></li>
                     <li><input type="submit" name="login" value="Log In" class="b"></li>
                 </form> 
             </div>
@@ -45,7 +49,7 @@
                       <div class="error" v-if="confirmPasswordError">{{confirmPasswordError}}</div>
                     </li>
                     <li>
-                      <input type="radio">Female <input type="radio">Male
+                      <input type="radio" v-model="radioFemale">Female <input type="radio" v-model="radioMale">Male
                     </li>
                     <li class="terms">By clicking Sign Up,, you agree to our  <a href="">Teams. Data Police</a> and  <br><a href="">Cookies Policy </a>you may receive SMS Notification from us and <br>can opt out any time.</li>
                     <li>
@@ -76,11 +80,23 @@ export default{
        emailError:'',
        passwordError: '',
        confirmPasswordError: '',
-       
+       radioMale:'',
+       radioFemale:'',
+       userDetails:[],
+       emailLogin:'',
+       passwordLogin:'',
+       loginEmailError:'',
+       loginPasswordError:''
     }
   },
   methods: {
     checkForm() {
+
+        const userObj ={
+            emailInput:this.email,
+            passwordInput:this.password
+        }
+
         console.log('Form submitted', this.username, this.email);
 
         const regexUsername= /[A-Za-z][A-Za-z0-9_]{7,29}$/;
@@ -123,6 +139,75 @@ export default{
         else {
             this.confirmPasswordError = ''
         }
+        if (
+            this.usernameError == '' &&
+            this.emailError == '' &&
+            this.passwordError == '' &&
+            this.confirmPasswordError == ''
+      ) {
+        alert("You have successfully Signed Up!");
+        
+            if(localStorage.userDetails){
+                let localUsers=localStorage.userDetails;
+                this.userDetails=JSON.parse(localUsers);
+            }
+
+        console.log("Validations successfully working");
+        this.userDetails.push(userObj);
+        localStorage.setItem('userDetails',JSON.stringify(this.userDetails));
+        this.email="";
+        this.password="";
+        this.username="";
+        this.confirmpassword="";
+        this.radioMale="";
+        this.radioFemale="";
+        }
+    },
+    loginForm(){
+
+        console.log('Login form submitted', this.emailLogin, this.passwordLogin);
+        let credentials={
+            loginEmail: this.emailLogin,
+            loginPassword: this.passwordLogin
+        }
+        
+        if (!this.emailLogin)   {
+            this.loginEmailError = 'Email cannot be empty';
+        }
+        else {
+            this.loginEmailError = ''
+        }
+        if (!this.passwordLogin)   {
+            this.loginPasswordError = 'Password cannot be empty';
+        }
+        else {
+            this.loginPasswordError = ''
+        } 
+        if (
+            this.loginEmailError == '' &&
+            this.loginPasswordError == ''){
+
+                let localStorageLoginUsers=localStorage.userDetails;
+                localStorageLoginUsers=JSON.parse(localStorageLoginUsers);
+                this.loginEmail=localStorageLoginUsers.findIndex(
+                    (userObj) => userObj.emailInput===credentials.loginEmail
+                )
+                if(this.loginEmail>-1){
+                    this.loginPassword=localStorageLoginUsers.findIndex(
+                        (userObj) => userObj.passwordInput===credentials.loginPassword
+                    )
+
+                    if(this.loginPassword>-1){
+                        this.$router.push("/DashBoard");
+                    }
+                    else{
+                        this.loginPasswordError='Password is does not match';
+                    }
+                }
+                else{
+                    this.loginEmailError='User does not exist';
+                }
+            } 
     }
   }
 }
@@ -269,7 +354,7 @@ header
     margin-top:10px;
 }
 .error{
-    color:red;
+    color:#000000;
     font-size: small;
 }
 
