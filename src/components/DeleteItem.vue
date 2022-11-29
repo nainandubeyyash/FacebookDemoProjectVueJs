@@ -54,6 +54,7 @@ export default {
   methods: {
     deleteDialogfn() {
       this.deleteDialog = false;
+      this.$emit("closeDeleteDialog", this.deleteDialog)
     },
     closeDelete() {
       this.dialogDelete = false;
@@ -61,6 +62,7 @@ export default {
       this.deleteIndex = -1;
     },
     confirmDelete() {
+      this.$emit("confirmDeleteDialog", this.deleteDialog)
       this.deleteDialog = false;
       this.books.splice(this.deleteIndex, 1);
       this.closeDelete();

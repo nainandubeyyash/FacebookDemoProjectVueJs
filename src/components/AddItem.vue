@@ -67,26 +67,24 @@ export default {
       noOfPages: 0,
     },
     addIndex: -1,
-    addBook: [],
+    Books: [],
   }),
   props: {
     studentName: String,
     dialogBox: Boolean,
     editItemProp: Object,
     editIndexProp: Number,
-    editBook: Array
   },
-  created() {
-    console.log(this.studentName);
-    console.log(this.dialogBox);
-  },
+  // created() {
+  //   console.log(this.studentName);
+  //   console.log(this.dialogBox);
+  // },
   watch: {
     dialogBox(newValue) {
       this.dialog = newValue;
       console.log(this.editItemProp);
       this.addItem = this.editItemProp;
       this.addIndex = this.editIndexProp;
-      this.addBook=this.editBook
     },
   },
 
@@ -95,14 +93,11 @@ export default {
       this.dialog = false;
       this.addItem = Object.assign({}, this.defaultItem);
       this.addIndex = -1;
+      this.$emit("closeBook", this.dialog);
     },
     save() {
       console.log("In child component", this.addItem);
-      if (this.addIndex > -1) {
-        this.$emit("addBookToList", this.addItem);
-      } else {
-        this.addBook.push(this.addItem);
-      }
+      this.$emit("addBookToList", this.addItem);
       this.close();
     },
 

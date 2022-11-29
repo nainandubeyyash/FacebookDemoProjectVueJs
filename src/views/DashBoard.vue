@@ -4,16 +4,18 @@
       :studentName="name"
       v-on:addBookToList="saveBook($event)"
       @callDailog="editDialog(item)"
+      v-on:closeBook="closeEdit()"
       :dialogBox="dialog"
       :editItemProp="bookItem"
       :editIndexProp="bookIndex"
-      :editBook="books"
     />
     <DeleteItem
       :deleteDialogBox="deleteDialog"
       :deleteBookIndex="bookIndex"
       :deleteBookItem="bookItem"
       :deleteBooks="books"
+      @confirmDeleteDialog="confirmDeleteDialogFn()"
+      @closeDeleteDialog="closeDeleteDialogFn()"
     />
     <v-data-table
       :headers="headers"
@@ -97,8 +99,12 @@ export default {
   methods: {
     saveBook(event) {
       console.log("In parent component", event);
+      this.dialog = false;
       this.books.unshift(event);
       console.log(this.books);
+    },
+    closeEdit(){
+      this.dialog=false;
     },
     editDialog(item) {
       this.dialog = true;
@@ -116,6 +122,12 @@ export default {
       this.bookIndex = this.books.indexOf(item);
       this.bookItem = Object.assign({}, item);
     },
+    confirmDeleteDialogFn(){
+      this.deleteDialog=false;
+    },
+    closeDeleteDialogFn(){
+      this.deleteDialog=false;
+    }
   },
 };
 </script>
