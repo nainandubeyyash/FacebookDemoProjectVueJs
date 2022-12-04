@@ -6,7 +6,7 @@
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <span class="text-h5">Add Books</span>
+          <span class="text-h5">{{ formTitle }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -75,10 +75,11 @@ export default {
     editItemProp: Object,
     editIndexProp: Number,
   },
-  // created() {
-  //   console.log(this.studentName);
-  //   console.log(this.dialogBox);
-  // },
+  computed: {
+      formTitle () {
+        return this.addIndex === -1 ? 'Add Book' : 'Edit Book'
+      },
+    },
   watch: {
     dialogBox(newValue) {
       this.dialog = newValue;
